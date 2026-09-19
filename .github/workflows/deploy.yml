@@ -65,6 +65,7 @@ jobs:
             pwd
 
             echo "Fetching latest code..."
+            git config --global --add safe.directory /home/sandsrd/02_applications/testCICD
 
             git fetch origin main
 
