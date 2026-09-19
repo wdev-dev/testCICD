@@ -1,0 +1,102 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>CI/CD Test Application</title>
+
+    <style>
+      body {
+        margin: 0;
+        font-family: Arial, sans-serif;
+        background: #f4f6f8;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+      }
+
+      .container {
+        background: white;
+        padding: 40px;
+        border-radius: 12px;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+      }
+
+      h1 {
+        color: #2563eb;
+      }
+
+      .status {
+        color: #16a34a;
+        font-weight: bold;
+      }
+
+      button {
+        margin-top: 20px;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 6px;
+        background: #2563eb;
+        color: white;
+        cursor: pointer;
+      }
+
+      button:hover {
+        background: #1d4ed8;
+      }
+
+      #result {
+        margin-top: 20px;
+        color: #333;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="container">
+      <h1>CI/CD Test Application</h1>
+
+      <p class="status">Application is running successfully</p>
+
+      <p>Version: <strong>1.0.0</strong></p>
+
+      <button onclick="testAPI()">Test API</button>
+
+      <div id="result"></div>
+    </div>
+
+    <script>
+      async function testAPI() {
+        const result = document.getElementById("result");
+
+        result.innerHTML = "Testing API...";
+
+        try {
+          const response = await fetch("http://localhost:3000/api/test");
+
+          const data = await response.json();
+
+          result.innerHTML = `
+            <p>
+                <strong>${data.message}</strong>
+            </p>
+            <p>
+                ${data.timestamp}
+            </p>
+        `;
+        } catch (error) {
+          result.innerHTML = `
+            <p style="color:red;">
+                API request failed
+            </p>
+        `;
+
+          console.error(error);
+        }
+      }
+    </script>
+  </body>
+</html>
