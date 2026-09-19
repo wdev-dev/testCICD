@@ -45,8 +45,8 @@ jobs:
             npm install --omit=dev
 
             echo "Restarting application..."
-            pm2 restart testCICD || pm2 start index.js --name testCICD
-
+            pm2 restart testCICD
+            echo "Restarting restarted..."
             pm2 save
 
             echo "================================="
