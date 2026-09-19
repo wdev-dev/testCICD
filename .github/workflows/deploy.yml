@@ -20,7 +20,7 @@ jobs:
             echo "================================="
             echo "Starting deployment"
             echo "================================="
-	   
+
             echo "User:"
             whoami
 
