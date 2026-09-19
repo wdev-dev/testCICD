@@ -1,0 +1,89 @@
+name: TEST CI/CD
+
+on:
+  push:
+    branches:
+      - main
+
+  workflow_dispatch:
+
+jobs:
+
+  # ==============================
+  # CI
+  # ==============================
+  ci:
+    name: CI - Validate Application
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 14
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate Node.js
+        run: node --check index.js
+
+  # ==============================
+  # CD
+  # ==============================
+  deploy:
+    name: CD - Deploy Production
+    needs: ci
+    runs-on: ubuntu-latest
+
+    steps:
+
+      - name: Deploy to CYGNUS server
+        uses: appleboy/ssh-action@v1.2.0
+
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+
+          script: |
+
+            set -e
+
+            echo "================================="
+            echo "Starting CYGNUS deployment"
+            echo "================================="
+
+            cd /home/ubuntu/enms-web-admin-api
+
+            echo "Current directory:"
+            pwd
+
+            echo "Fetching latest code..."
+
+            git fetch origin main
+
+            echo "Resetting to latest main..."
+
+            git reset --hard origin/main
+
+            echo "Installing production dependencies..."
+
+            npm ci --omit=dev
+
+            echo "Reloading PM2..."
+
+            pm2 reload TESTCICD
+
+            echo "Checking PM2 status..."
+
+            pm2 status TESTCICD
+
+            echo "================================="
+            echo "TESTCICD deployment completed"
+            echo "================================="
