@@ -59,7 +59,7 @@ jobs:
             echo "Starting CYGNUS deployment"
             echo "================================="
 
-            cd /home/ubuntu/enms-web-admin-api
+            cd /home/sandsrd/02_applications/testCICD
 
             echo "Current directory:"
             pwd
