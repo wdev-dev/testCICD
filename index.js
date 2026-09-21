@@ -26,7 +26,7 @@ app.get("/health", (req, res) => {
 app.get("/api/test", (req, res) => {
   res.json({
     message: "CI/CD API is working successfully",
-    timestamp: new Date().toISOString(),
+    timestamp: new Date().toISOString() + 'Well Worked',
   });
 });
 
